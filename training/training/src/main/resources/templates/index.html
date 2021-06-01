@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     >
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    <title>Список программ</title>
+</head>
+<body>
+<div th:include="Header :: copy"></div>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+<div class="container">
+    <table class="table table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th scope="row">Creator</th>
+            <th scope="col">Name</th>
+            <th scope="col">More Info</th>
+            <th scope="col">purpose</th>
+            <th scope="col">type</th>
+            <th scope="col">countOFsubscribers</th>
+            <th scope="col">Trains</th>
+            <th scope="col">Subscribe</th>
+        </tr>
+        </thead>
+        <tbody th:each= "p : ${programms}">
+        <tr>
+            <th scope="row" th:text="${p.getUser().getUsername()}"></th>
+            <td th:text="${p.getName()}"></td>
+            <td> <a th:href="@{/{id}/details(id = ${p.getID()} )}">show</a></td>
+            <td th:text="${p.getPurpose()}"></td>
+            <td th:text="${p.getType()}"></td>
+            <td th:text="${p.getCountOFsubscribers()}"></td>
+            <td> <a th:href="@{/{id}(id = ${p.getID()} )}">show</a> </td>
+            <td>
+                <form th:method="POST" th:action="@{/{id}/subscribe(id = ${p.getID()})}">
+                    <input class="btn btn-primary" type="Submit" value="subscribe " />
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br/>
+    <div>
+    <a class="btn btn-primary" href="training/create" role="button">ADD new </a>
+        </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
