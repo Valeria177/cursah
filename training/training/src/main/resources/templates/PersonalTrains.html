@@ -30,7 +30,7 @@
         <td th:text="${t.getTrain().getDescription()}"></td>
         <td th:text="${t.getTrain().getMuscleGroup()}"></td>
         <td th:text="${t.getTrain().getPurpose()}"></td>
-        <td th:text="${t.getStatus()}"></td>
+        <td style="background-color: #b3e9e3;" th:text="${t.getStatus()}"></td>
         <td> <a th:href="@{/{idP}/{idT}/start(idT = ${t.getID()}, idP = ${id_prog})}">START</a> </td>
     </tr>
     </tbody>

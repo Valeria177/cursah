@@ -40,14 +40,36 @@ public class TrainingController {
         this.exerciserRepository = exerciserRepository;
         this.personalProgrammRepository = personalProgrammRepository;
         this.personalTrainRepository = personalTrainRepository;
-    }
 
+    }
     //PROGRAMMS
     @GetMapping
-    public String indexPage(Model model, Principal principal) {
+    public String indexPage(@RequestParam(required = false) String type,
+                            Model model, Principal principal) {
         logger.info("User name: {}",principal.getName());
+        List<Programm> programms = new ArrayList<Programm>();
+        if (type!=null)
+            programms=repository.findByType(type);
+        else
+            programms=repository.findAll();
+        model.addAttribute("programms", programms);
+        model.addAttribute("user", userRepository.findByUsername(principal.getName()).get());
+        return "index";
+    }
 
-        model.addAttribute("programms", repository.findAll());
+    @GetMapping("/createdPrgogramms")
+    public String createdProgramms(@RequestParam(required = false) String type, Model model, Principal principal) {
+        logger.info("User name: {}",principal.getName());
+        User user = userRepository.findByUsername(principal.getName()).get();
+        List<Programm> programms = new ArrayList<Programm>();
+        if(type==null) {
+            programms = user.getProgramms();
+        }
+        else {
+            programms = repository.findByTypeForCreator(type, user.getId());
+        }
+        model.addAttribute("programms", programms);
+        model.addAttribute("user", user);
         return "index";
     }
 
@@ -69,11 +91,25 @@ public class TrainingController {
         return "Detailprogramm";
     }
 
+
+    @GetMapping("/auto")
+    public String auto(Model model){
+        return "Auto";
+    }
+
+    @PostMapping("/auto")
+    public String autoP(Model model){
+        model.addAttribute("programm",repository.findauto());
+        return "DetailProgramm";
+    }
+
+
     @GetMapping("/create")
     public String createProgramm(Model model){
         model.addAttribute("programm", new Programm());
         return "CreateProgramm";
     }
+
 
     @PostMapping("/createProgramm")
     public String createProgramm(@ModelAttribute("programm") Programm programm, Principal principal){
@@ -134,9 +170,10 @@ public class TrainingController {
 
     //TRAINS
     @GetMapping("/{id}")
-    public String TrainsOFprogramm(@PathVariable("id") int id, Model model){
-        model.addAttribute("trains", repository.getOne(id).getTrains());
+    public String TrainsOFprogramm(@PathVariable("id") int id, Model model, Principal principal){
+        model.addAttribute("programm", repository.getOne(id));
         model.addAttribute("id_prog", id);
+        model.addAttribute("user", userRepository.findByUsername(principal.getName()).get());
         return "Train";
     }
 

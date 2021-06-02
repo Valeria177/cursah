@@ -3,6 +3,7 @@ package ru.laba.training.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.laba.training.persist.Model.Role;
 import ru.laba.training.persist.Model.User;
 import ru.laba.training.persist.UserRepository;
 
@@ -18,10 +19,11 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void create(UserRepr userRepr) {
-        User user=new User();
+    public void create(UserRepr userRepr, Role role) {
+        User user = new User();
         user.setUsername(userRepr.getUsername());
         user.setPassword(passwordEncoder.encode(userRepr.getPassword()));
+        user.setRole(role);
         repository.save(user);
     }
 }
